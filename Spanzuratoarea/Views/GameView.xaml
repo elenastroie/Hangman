@@ -1,0 +1,162 @@
+﻿<Window x:Class="Spanzuratoarea.Views.GameView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Spanzuratoarea.Views"
+        xmlns:cal="http://www.caliburnproject.org"
+        mc:Ignorable="d"
+        Title="Game" Height="600" Width="900" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Background="#1E1B1B" cal:Message.Attach="[Event Closing] = [Action OnClose()]"
+        >
+    <Window.Resources>
+        <Style x:Key="AlphabetButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Foreground" Value="#F6F4F4"/>
+            <Setter Property="FontFamily" Value="Comic Sans"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="5,0,5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border"
+                            BorderThickness="2"
+                                BorderBrush="#D15219"
+                                Background="#141212"
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#D15219"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#F6F4F4"/>
+                                <Setter Property="Button.Foreground" Value="Black"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <StackPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem cal:Message.Attach="[Event Click] = [Action NewGame()]" Header="New Game"  />
+                <MenuItem Header="Open Game" />
+                <MenuItem Header="Save Game" />
+                <MenuItem Header="Exit" cal:Message.Attach="[Event Click] = [Action OnClose()]" />
+            </MenuItem>
+            <MenuItem Header="Category">
+                <MenuItem cal:Message.Attach="[Event Click] = [Action ChooseCategory($this.IsChecked,'All')]" Header="All categories" IsCheckable="True"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="Stroie Elena" IsEnabled="False" />
+                <MenuItem Header="Grupa: 10LF283" IsEnabled="False" />
+                <MenuItem Header="Specializarea: Informatica" IsEnabled="False" />
+            </MenuItem>
+        </Menu>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical"
+                        Width="189" Height="200" Margin="30,20,0,0">
+                <Rectangle Width="80" Height="80" Stroke="White" StrokeThickness="5" HorizontalAlignment="Center">
+                    <Rectangle.Fill>
+                        <ImageBrush ImageSource="{Binding PlayerPicture , Mode=OneWay}" Stretch="Fill"></ImageBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <StackPanel HorizontalAlignment="Center" Margin ="0,10,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Player: " Foreground="#F6F4F4" FontSize ="16" HorizontalAlignment="Center" FontStyle="Italic" VerticalAlignment="Center"></TextBlock>
+                        <Label Grid.Row="0" Grid.Column="1" x:Name="Username" Foreground="#F6F4F4" FontSize ="16" HorizontalAlignment="Center" FontStyle="Italic" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Round: " Foreground="#F6F4F4" FontSize ="16" HorizontalAlignment="Center" FontStyle="Italic" VerticalAlignment="Center"></TextBlock>
+                        <Label Grid.Row="1" Grid.Column="1" x:Name="CurrentRound" Foreground="#F6F4F4" FontSize ="16" HorizontalAlignment="Center" FontStyle="Italic" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Width="453" >
+                <Rectangle Height="200" Width="200" 
+                           Stroke="#F6F4F4" StrokeThickness="2"
+                           Margin="0,40,0,0">
+                    <Rectangle.Fill>
+                        <ImageBrush ImageSource="{Binding HangmanImage}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+                <StackPanel Margin="90,10,90,5">
+                    <ItemsControl x:Name="WordDisplayed" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  Background="#141212" BorderBrush="#D15219" BorderThickness="1">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Margin="5,0,5,0" Foreground="#F6F4F4" FontSize="40" FontFamily="Corbel Light"></TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Width="200">
+                <Label x:Name="TimeLeft" Foreground="#F6F4F4" FontSize="30"
+                       Background="#141212" BorderBrush="#D15219" BorderThickness="2"  Margin="0,60,50,0"
+                        Width="120" Height="55" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Label x:Name="Lives" Foreground="#F6F4F4" FontSize="20" Margin="0,20,50,0"
+                       Background="#141212" BorderBrush="#D15219" BorderThickness="2" 
+                       Height="40" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            </StackPanel>
+
+        </StackPanel>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">
+                <Button cal:Message.Attach="[Event Click] = [Action Click('A')]" Content="A" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('B')]" Content="B" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('C')]" Content="C" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('D')]" Content="D" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('E')]" Content="E" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('F')]" Content="F" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('G')]" Content="G" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('H')]" Content="H" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('I')]" Content="I" Style="{StaticResource AlphabetButton}"></Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Button cal:Message.Attach="[Event Click] = [Action Click('J')]" Content="J" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('K')]" Content="K" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('L')]" Content="L" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('M')]" Content="M" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('N')]" Content="N" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('O')]" Content="O" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('P')]" Content="P" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('Q')]" Content="Q" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('R')]" Content="R" Style="{StaticResource AlphabetButton}"></Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Button cal:Message.Attach="[Event Click] = [Action Click('S')]" Content="S" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('T')]" Content="T" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('U')]" Content="U" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('V')]" Content="V" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('W')]" Content="W" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('X')]" Content="X" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('Y')]" Content="Y" Style="{StaticResource AlphabetButton}"></Button>
+                <Button cal:Message.Attach="[Event Click] = [Action Click('Z')]" Content="Z" Style="{StaticResource AlphabetButton}"></Button>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</Window>

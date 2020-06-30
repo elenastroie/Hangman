@@ -1,0 +1,2 @@
+elena 1 0 1
+andrei 5 1 4    
